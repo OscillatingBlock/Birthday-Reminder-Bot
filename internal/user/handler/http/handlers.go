@@ -30,18 +30,18 @@ func NewUserHandler(usecase user.UserUsecase, logger *logger.Logger, config *con
 
 func (h *UserHandler) SetBirthday(c telebot.Context) error {
 	if c.Chat().Type != telebot.ChatPrivate {
-		return c.Send("For privacy, please set your birthday in a private chat with me. Start a DM and use /setBirthday there.")
+		return c.Send("For privacy, please set your birthday in a private chat with me. Start a DM and use /birthday there.")
 	}
 
 	args := c.Args()
 	if len(args) == 0 {
-		return c.Send("Please provide your birthday.\nExamples:\n/setBirthday 21-12\n/setBirthday 21-12-1990")
+		return c.Send("Please provide your birthday.\nExamples:\n/birthday 21-12\n/birthday 21-12-1990")
 	}
 
 	input := strings.Join(args, " ")
 	day, month, yearPtr, err := parseFlexibleDate(input)
 	if err != nil {
-		return c.Send("Invalid date format.\nUse: /setBirthday DD-MM or DD-MM-YYYY\nExample: /setbirthday 21-12")
+		return c.Send("Invalid date format.\nUse: /birthday DD-MM or DD-MM-YYYY\nExample: /setbirthday 21-12")
 	}
 
 	var usernamePtr *string
@@ -66,7 +66,7 @@ func (h *UserHandler) SetBirthday(c telebot.Context) error {
 	}
 
 	if err := utils.ValidateStruct(context.Background(), params); err != nil {
-		c.Send("Please provide your birthday.\nExamples:\n/setBirthday 21-12\n/setbirthday 21-12-1990")
+		c.Send("Please provide your birthday.\nExamples:\n/birthday 21-12\n/birthday 21-12-1990")
 	}
 
 	if err := h.usecase.RegisterOrUpdateBirthday(context.Background(), params); err != nil {
@@ -79,7 +79,7 @@ func (h *UserHandler) SetBirthday(c telebot.Context) error {
 		yearStr = fmt.Sprintf("-%.4d", *yearPtr)
 	}
 
-	return c.Send(fmt.Sprintf("✅ Birthday saved as %d %s%s!, use /optIn in groups where you want to set reminder for your bday", day, time.Month(month).String(), yearStr))
+	return c.Send(fmt.Sprintf("✅ Birthday saved as %d %s%s!, use /enable in groups where you want to set reminder for your bday", day, time.Month(month).String(), yearStr))
 }
 
 func parseFlexibleDate(input string) (day, month int, year *int, err error) {
@@ -195,33 +195,26 @@ func (h *UserHandler) HandleListBirthdays(c telebot.Context) error {
 }
 
 func (h *UserHandler) Help(c telebot.Context) error {
-	help := `📅 Birthday Bot Commands
+	help := `
+	BIRTHDAY BOT COMMANDS🎂
 
-🎂SETUP
-/birthday DD-MM      → Set birthday (DM only)
+SETUP & INFORMATION
+/birthday DD-MM   : Register or update birth date (via DM)
+/birthdays                : List registered birthdays in current group
 
-📋GROUP INFO
-/birthdays           → List all birthdays in this group
+NOTIFICATION CONTROL
+/enable   : Activate reminders for current channel
+/disable  : Deactivate reminders for current channel
+/pause    : Suspend all automated reminders
+/resume : Reinstate all automated reminders
 
-🎛CONTROL
-/enable              → Enable reminders here
-/disable             → Disable reminders here
-/pause               → Pause all reminders
-/resume              → Resume all reminders
+GENERAL
+/help : Display this menu
 
-ℹ️HELP
-/help                → Show this menu
-
-Privacy:
-• Your birthday date is private  
-• Only names & dates appear via /birthdays  
-• No spam
-
-Time:
-• Wishes are sent at 12:00 AM IST daily
-
-Happy birthdays ahead 🎈
+NOTES
+Schedule: Notifications sent daily at 00:00 IST.
 `
+
 	c.Send(help, &telebot.SendOptions{ParseMode: telebot.ModeMarkdown})
 	return nil
 }

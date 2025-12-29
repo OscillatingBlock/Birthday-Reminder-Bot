@@ -1,2 +1,3 @@
 ./mybot.service
 ./cmd/api/bdayBot
+./.env
