@@ -24,6 +24,6 @@ type User struct {
 // groups where the user wants birthday reminders
 type RegisteredGroup struct {
 	UserID  uuid.UUID `bun:",pk,type:uuid" validate:"-"`
-	GroupID int64     `bun:",pk,notnull" validate:"required"` // Telegram chat ID (negative for groups)
+	GroupID int64     `bun:",pk,notnull" validate:"required"`
 	AddedAt time.Time `bun:"added_at,notnull,default:current_timestamp" validate:"-"`
 }

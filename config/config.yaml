@@ -1,0 +1,14 @@
+server:
+  port: ":8080"
+  environment: "development"
+
+bun:
+  dsn: "postgres://bdaybot:bdaybot%40orange123@127.0.0.1:5432/bdaybot_db?sslmode=disable" 
+
+loggerMode:
+  development: true
+  prod: false
+  level: "debug"
+
+timeZone:
+  timeZone: "Asia/Kolkata" 

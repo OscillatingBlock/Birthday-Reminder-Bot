@@ -1,0 +1,26 @@
+[Unit]
+Description=Birthday Reminder Bot
+After=network.target postgresql.service
+Requires=postgresql.service
+
+[Service]
+Type=simple
+
+User=aayush
+
+WorkingDirectory=/opt/bdayBot
+EnvironmentFile=/etc/bdayBot/bdayBot.env
+Environment=BDAYBOT_CONFIG=/etc/bdayBot/config.yaml
+ExecStart=/usr/local/bin/bdayBot --config /etc/bdayBot/config.yaml
+
+Restart=on-failure
+RestartSec=5
+
+StandardOutput=journal
+StandardError=journal
+
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target
