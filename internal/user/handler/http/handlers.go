@@ -79,7 +79,8 @@ func (h *UserHandler) SetBirthday(c telebot.Context) error {
 		yearStr = fmt.Sprintf("-%.4d", *yearPtr)
 	}
 
-	return c.Send(fmt.Sprintf("✅ Birthday saved as %d %s%s!, use /enable in groups where you want to set reminder for your bday", day, time.Month(month).String(), yearStr))
+	return c.Send(fmt.Sprintf("✅ Birthday saved as %d %s%s!, use /enable in groups where you want to set reminder for your bday",
+		day, time.Month(month).String(), yearStr))
 }
 
 func parseFlexibleDate(input string) (day, month int, year *int, err error) {
@@ -159,12 +160,19 @@ func (h *UserHandler) ReactivateUser(c telebot.Context) error {
 }
 
 func (h *UserHandler) CheckAlive(c telebot.Context) error {
+
+	c.Send("I'm alive madafaka!")
+	return nil
+}
+
+func (h *UserHandler) CheckSystemTime(c telebot.Context) error {
 	location, err := time.LoadLocation(h.config.TimeZone.TimeZone)
 	if err != nil {
 		location, _ = time.LoadLocation("Asia/Kolkata")
 	}
-	c.Send("I'm alive madafaka!, system time = %s", time.Now().In(location))
-	return nil
+
+	now := time.Now().In(location).Round(time.Second)
+	return c.Send(fmt.Sprintf("Current system time: %s", now))
 }
 
 func (h *UserHandler) HandleListBirthdays(c telebot.Context) error {
@@ -220,5 +228,5 @@ Schedule: Notifications sent daily at 00:00 IST.
 }
 
 func (h *UserHandler) CheckVersion(c telebot.Context) error {
-	return c.Send("current version: v1.0.2")
+	return c.Send("current version: v1.0.3")
 }

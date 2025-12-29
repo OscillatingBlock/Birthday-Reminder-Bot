@@ -9,7 +9,6 @@ import (
 
 type Config struct {
 	Server     Server     `yaml:"server"`
-	Bun        BunConfig  `yaml:"bun"`
 	LoggerMode LoggerMode `yaml:"loggerMode"`
 	TimeZone   TimeZone   `yaml:"timeZone"`
 }

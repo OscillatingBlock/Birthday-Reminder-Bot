@@ -1,3 +1,4 @@
 ./mybot.service
 ./cmd/api/bdayBot
 ./.env
+./config/config.yaml

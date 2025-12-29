@@ -50,7 +50,8 @@ func main() {
 		logger.Errorf("failed to get bot: %w", err)
 	}
 
-	sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(cfg.Bun.DSN)))
+	dsn := os.Getenv("DSN")
+	sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(dsn)))
 
 	db := bun.NewDB(sqldb, pgdialect.New())
 

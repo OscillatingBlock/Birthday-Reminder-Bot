@@ -23,10 +23,11 @@ func (s *Server) MapHandlers() {
 	s.bot.Handle("/enable", handler.OptInToGroup)
 	s.bot.Handle("/pause", handler.DeactivateUser)
 	s.bot.Handle("/resume", handler.ReactivateUser)
-	s.bot.Handle("/ping", handler.CheckAlive)
 	s.bot.Handle("/birthdays", handler.HandleListBirthdays)
 	s.bot.Handle("/help", handler.Help)
+	s.bot.Handle("/ping", handler.CheckAlive)
 	s.bot.Handle("/version", handler.CheckVersion)
+	s.bot.Handle("/time", handler.CheckSystemTime)
 
 	s.bot.Use(middleware.Logger())
 
